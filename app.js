@@ -13,7 +13,8 @@ app.get('/', lib.serveLoginPage);
 app.get('/login', lib.serveLoginPage);
 app.get('/index.html', lib.serveLoginPage);
 
-app.post('/login', lib.loginUser)
+app.post('/login', lib.loginUser);
+
 app.postProcess(serveStaticFile);
 
 module.exports = app;
