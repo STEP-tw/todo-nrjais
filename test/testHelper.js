@@ -1,5 +1,4 @@
-let chai = require('chai');
-let assert = chai.assert;
+let assert = require('chai').assert;
 
 let th = {};
 th.should_be_redirected_to = (res,location)=>{
