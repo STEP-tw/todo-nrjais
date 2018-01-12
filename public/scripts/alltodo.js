@@ -4,7 +4,7 @@ let fillData = function (data) {
     todoList += `<p>${element.text}</p>`;
   });
 
-  document.body.innerHTML = todoList + document.body.innerHTML;
+  document.getElementById('list').innerHTML = todoList;
 }
 
 let renderList = function () {
@@ -13,13 +13,28 @@ let renderList = function () {
   fillData(todoList);
 }
 
-let loadTodoList = function () {
+let getTitle = function () {
   let url = window.location.href;
-  let title = url.split('?').pop().split('=').pop();
+  return url.split('?').pop().split('=').pop();
+}
+
+let loadTodoList = function () {
+  let title = getTitle();
   let req = new XMLHttpRequest();
   req.open('get', `/todolist/alltodo?title=${title}`);
   req.addEventListener('load', renderList);
   req.send();
+}
+
+let postTodo = function () {
+  let text = document.getElementById('text').value;
+  let title = getTitle();
+  let req = new XMLHttpRequest();
+  req.open('post', `/todolist/alltodo`);
+  req.addEventListener('load', () => {
+    window.location.reload();
+  });
+  req.send(`title=${title}&text=${text}`);
 }
 
 window.onload = loadTodoList;

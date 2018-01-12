@@ -46,4 +46,22 @@ describe('app',()=>{
       })
     })
   })
+
+  describe('Get /logout',()=>{
+    it('redirects to / if not logged in',done=>{
+      request(app,{method:'get',url:'/logout'},res=>{
+        th.should_be_redirected_to(res,'/');
+        done();
+      })
+    })
+  })
+
+  describe('Get /todolist',()=>{
+    it('redirects to / if not logged in',done=>{
+      request(app,{method:'get',url:'/todolist'},res=>{
+        th.should_be_redirected_to(res,'/');
+        done();
+      })
+    })
+  })
 })

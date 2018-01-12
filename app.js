@@ -16,8 +16,10 @@ app.get('/index.html', lib.serveLoginPage);
 app.get('/todolist', lib.serveTodoList);
 app.post('/todolist', lib.createTodoList);
 app.get('/todolist/alltodo', lib.serveTodo);
+app.post('/todolist/alltodo', lib.addTodo);
 
 app.post('/login', lib.loginUser);
+app.get('/logout', lib.logoutUser);
 
 app.postProcess(serveStaticFile);
 
