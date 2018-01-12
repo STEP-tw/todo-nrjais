@@ -1,18 +1,15 @@
 [
   {
     "username": "nrjais",
+    "password": "nrjais",
     "name": "Neeraj Jaiswal",
-    "todoLists" : [{
-      "title" : "hello",
-      "description"  :"des hello"
-    }]
+    "sessionId": "1515751345901",
+    "todoLists": []
   },
   {
     "username": "arvind",
+    "password": "arvind",
     "name": "Arvind Singh",
-    "todoLists" : [{
-        "title": "hello",
-        "description": "des hello"
-      }]
+    "todoLists": []
   }
 ]

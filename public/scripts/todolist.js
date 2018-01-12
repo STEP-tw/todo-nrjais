@@ -1,7 +1,7 @@
 let fillData = function(data){
   let todoList = "";
   data.forEach(element => {
-    todoList += `<p><a href="/todolist/item.html?title=${element.title}">${element.title}</a>   ${element.description}</p>`;
+    todoList += `<p><a href="/todolist/alltodo.html?title=${element.title}">${element.title}</a>   ${element.description}</p>`;
   });
 
   document.body.innerHTML = todoList + document.body.innerHTML;
