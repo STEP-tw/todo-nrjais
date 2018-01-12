@@ -1,0 +1,23 @@
+{
+  "name": "todo-nrjais",
+  "version": "1.0.0",
+  "description": "A todo app",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/todo-nrjais.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/todo-nrjais/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/todo-nrjais#readme",
+  "devDependencies": {
+    "chai": "^4.1.2"
+  }
+}
