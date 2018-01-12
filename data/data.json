@@ -1,3 +1,18 @@
 [
-  
+  {
+    "username": "nrjais",
+    "name": "Neeraj Jaiswal",
+    "todoLists" : [{
+      "title" : "hello",
+      "description"  :"des hello"
+    }]
+  },
+  {
+    "username": "arvind",
+    "name": "Arvind Singh",
+    "todoLists" : [{
+        "title": "hello",
+        "description": "des hello"
+      }]
+  }
 ]
