@@ -26,7 +26,7 @@ let invoke = function (req, res) {
     handler(req, res);
 }
 const initialize = function () {
-  this._handlers = { GET: {}, POST: {}, PUT: {}};
+  this._handlers = { GET: {}, POST: {}, PUT: {}, DELETE:{}};
   this._preprocess = [];
   this._postprocess = [];
 };
@@ -38,6 +38,9 @@ const put = function (url, handler) {
 }
 const post = function (url, handler) {
   this._handlers.POST[url] = handler;
+};
+const onDelete = function (url, handler) {
+  this._handlers.DELETE[url] = handler;
 };
 const use = function (handler) {
   this._preprocess.push(handler);
@@ -90,6 +93,7 @@ let create = () => {
   rh.post = post;
   rh.use = use;
   rh.put = put;
+  rh.delete = onDelete;
   rh.postProcess = postProcess;
   return rh;
 }

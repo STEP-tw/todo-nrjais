@@ -18,7 +18,8 @@ app.post('/todolist', lib.createTodoList);
 app.get('/todolist/alltodo', lib.serveTodo);
 app.post('/todolist/alltodo', lib.addTodo);
 
-app.put('/todolist/alltodo',lib.updateTodoItem)
+app.delete('/todolist/alltodo',lib.deleteTodoItem);
+app.put('/todolist/alltodo',lib.updateTodoItem);
 app.post('/login', lib.loginUser);
 app.get('/logout', lib.logoutUser);
 
