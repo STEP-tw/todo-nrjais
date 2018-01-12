@@ -8,12 +8,12 @@ describe('TODOList', () => {
     todoList = new TodoList('title', 'a test');
   });
 
-  it('should have return title and description by getters', () => {
+  it('should return title and description by getters', () => {
     assert.equal(todoList.title, 'title');
     assert.equal(todoList.description, 'a test');
   });
 
-  it('should have update title and description by getters', () => {
+  it('should update title and description by setters', () => {
     todoList.title = 'new';
     todoList.description = 'new d';
     assert.equal(todoList.title, 'new');

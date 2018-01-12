@@ -26,12 +26,15 @@ let invoke = function (req, res) {
     handler(req, res);
 }
 const initialize = function () {
-  this._handlers = { GET: {}, POST: {} };
+  this._handlers = { GET: {}, POST: {}, PUT: {}};
   this._preprocess = [];
   this._postprocess = [];
 };
 const get = function (url, handler) {
   this._handlers.GET[url] = handler;
+}
+const put = function (url, handler) {
+  this._handlers.PUT[url] = handler;
 }
 const post = function (url, handler) {
   this._handlers.POST[url] = handler;
@@ -86,6 +89,7 @@ let create = () => {
   rh.get = get;
   rh.post = post;
   rh.use = use;
+  rh.put = put;
   rh.postProcess = postProcess;
   return rh;
 }

@@ -29,7 +29,6 @@ describe('app',()=>{
       request(app, { method: 'GET', url: '/', headers: { 'cookie':'message=Login Failed'}},res=>{
         th.status_is_ok(res);
         th.body_contains(res,'User Name :');
-        console.log(res);
         th.body_contains(res,'Login Failed');
         th.should_not_have_cookie(res,'message');
         done();
@@ -58,10 +57,27 @@ describe('app',()=>{
 
   describe('Get /todolist',()=>{
     it('redirects to / if not logged in',done=>{
-      request(app,{method:'get',url:'/todolist'},res=>{
+      request(app,{method:'GET',url:'/todolist'},res=>{
         th.should_be_redirected_to(res,'/');
         done();
       })
     })
   })
+
+  describe.skip('tests after logged in', () => {
+    request(app, { method: 'POST', url: '/login', body:'username=nrjais&password=nrjais'},(res)=>{
+      let sessionid = res.headers['Set-Cookie'];
+      let headers = {
+        cookie : sessionid
+      }
+      describe('GET /todolist', () => {
+        it('gives [] /todolist', (done) => {
+          request(app, { method: 'GET', url:"/todolist", headers:headers},(res)=>{
+            th.status_is_ok(res);
+            assert.equal(res.body, '[]');
+          });
+        });
+      });
+    })
+  });
 })
