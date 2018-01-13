@@ -1,15 +1,17 @@
 let fillData = function (data) {
   let todoList = "";
+  console.log(data);
   data.forEach(element => {
     let title = element.title;
+    let id = element.id;
     let description = element.description;
-    todoList += `<p id="${title}">
-    <a href="/todolist/alltodo.html?title=${title}">
+    todoList += `<p id="${id}">
+    <a href="/todolist/alltodo.html?id=${id}">
     ${title}
     </a>${description}
-    <input type="button" onclick="editItem('${title}','${description}')"
+    <input type="button" onclick="editItem('${id}','${title}','${description}')"
         value="Edit">
-    <input type="button" onclick="deleteItem('${title}')"
+    <input type="button" onclick="deleteItem('${id}')"
         value="Delete"></p>`;
   });
   document.getElementById('list').innerHTML = todoList;
@@ -19,13 +21,13 @@ let refresh = () => {
   window.location.reload();
 };
 
-let editItem = function(title,description){
-  let listItem = document.getElementById(title);
+let editItem = function(id,title,description){
+  let listItem = document.getElementById(id);
 
   let editingHTML = `
-  Title : <input type="text" value="${title}" id='${title}'>
-  Description : <input type="text" value="${description}"  id='${title}-des'>
-  <input type="button" onclick="saveEditedItem('${title}')"
+  Title : <input type="text" value="${title}" id='${id}'>
+  Description : <input type="text" value="${description}"  id='${id}-des'>
+  <input type="button" onclick="saveEditedItem('${id}')"
         value="Save">
   `
 
@@ -34,20 +36,20 @@ let editItem = function(title,description){
   listItem.replaceWith(div);
 }
 
-let saveEditedItem = function(oldTitle){
-  let title = document.getElementById(oldTitle).value;
-  let description = document.getElementById(oldTitle+'-des').value;
+let saveEditedItem = function(id){
+  let title = document.getElementById(id).value;
+  let description = document.getElementById(id+'-des').value;
   let req = new XMLHttpRequest();
   req.open('put', `/todolist`);
   req.addEventListener('load', refresh);
-  req.send(`title=${oldTitle}&newTitle=${title}&description=${description}`);
+  req.send(`id=${id}&newTitle=${title}&description=${description}`);
 }
 
-let deleteItem = function (title) {
+let deleteItem = function (id) {
   let req = new XMLHttpRequest();
   req.open('delete', `/todolist`);
   req.addEventListener('load', refresh);
-  req.send(`title=${title}`);
+  req.send(`id=${id}`);
 }
 
 let renderList = function () {

@@ -4,36 +4,36 @@ let fillData = function (data) {
     let done = element.done;
     let id = element.id;
     todoList += `<p><b>${element.text}<b>
-    <input type="button" onclick="${done ? 'markUndone' : 'markDone'}(${element.id})"
+    <input type="button" onclick="${done ? 'markUndone' : 'markDone'}('${id}')"
     value=${done ? 'undone' : 'done'}>
-        <input type="button" onclick="deleteItem(${id})"
+        <input type="button" onclick="deleteItem('${id}')"
         value="delete"><p>`;
   });
   document.getElementById('list').innerHTML = todoList;
 }
 
 let markDone = function (id) {
-  let title = getTitle();
+  let listId = getListId();
   let req = new XMLHttpRequest();
   req.open('put', `/todolist/alltodo`);
   req.addEventListener('load', refresh);
-  req.send(`title=${title}&id=${id}&done=true`);
+  req.send(`listId=${listId}&itemId=${id}&done=true`);
 }
 
 let deleteItem = function (id) {
-  let title = getTitle();
+  let listId = getListId();
   let req = new XMLHttpRequest();
   req.open('delete', `/todolist/alltodo`);
   req.addEventListener('load', refresh);
-  req.send(`title=${title}&id=${id}`);
+  req.send(`listId=${listId}&itemId=${id}`);
 }
 
 let markUndone = function (id) {
-  let title = getTitle();
+  let listId = getListId();
   let req = new XMLHttpRequest();
   req.open('put', `/todolist/alltodo`);
   req.addEventListener('load', refresh);
-  req.send(`title=${title}&id=${id}&done=false`);
+  req.send(`listId=${listId}&itemId=${id}&done=false`);
 }
 
 let renderList = function () {
@@ -42,15 +42,15 @@ let renderList = function () {
   fillData(todoList);
 }
 
-let getTitle = function () {
+let getListId = function () {
   let url = window.location.href;
   return url.split('?').pop().split('=').pop();
 }
 
 let loadTodoList = function () {
-  let title = getTitle();
+  let listId = getListId();
   let req = new XMLHttpRequest();
-  req.open('get', `/todolist/alltodo?title=${title}`);
+  req.open('get', `/todolist/alltodo?listId=${listId}`);
   req.addEventListener('load', renderList);
   req.send();
 }
@@ -61,11 +61,11 @@ let refresh = () => {
 
 let postTodo = function () {
   let text = document.getElementById('text').value;
-  let title = getTitle();
+  let listId = getListId();
   let req = new XMLHttpRequest();
   req.open('post', `/todolist/alltodo`);
   req.addEventListener('load', refresh);
-  req.send(`title=${title}&text=${text}`);
+  req.send(`id=${listId}&text=${text}`);
 }
 
 window.onload = loadTodoList;
