@@ -1,6 +1,5 @@
 let fillData = function (data) {
   let todoList = "";
-  console.log(data);
   data.forEach(element => {
     let title = element.title;
     let id = element.id;
@@ -39,17 +38,12 @@ let editItem = function(id,title,description){
 let saveEditedItem = function(id){
   let title = document.getElementById(id).value;
   let description = document.getElementById(id+'-des').value;
-  let req = new XMLHttpRequest();
-  req.open('put', `/todolist`);
-  req.addEventListener('load', refresh);
-  req.send(`id=${id}&newTitle=${title}&description=${description}`);
+  let postData = `id=${id}&newTitle=${title}&description=${description}`;
+  sendRequest('put', `/todolist`, refresh, postData);
 }
 
 let deleteItem = function (id) {
-  let req = new XMLHttpRequest();
-  req.open('delete', `/todolist`);
-  req.addEventListener('load', refresh);
-  req.send(`id=${id}`);
+  sendRequest('delete', `/todolist`, refresh, `id=${id}`)
 }
 
 let renderList = function () {
@@ -59,10 +53,14 @@ let renderList = function () {
 }
 
 let loadTodoList = function () {
+  sendRequest('get', '/todolist', renderList)
+}
+
+let sendRequest = function (method, url, onLoad, data){
   let req = new XMLHttpRequest();
-  req.open('get', '/todolist');
-  req.addEventListener('load', renderList);
-  req.send();
+  req.open(method, url);
+  req.addEventListener('load', onLoad);
+  req.send(data);
 }
 
 window.onload = loadTodoList;

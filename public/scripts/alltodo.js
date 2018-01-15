@@ -14,26 +14,20 @@ let fillData = function (data) {
 
 let markDone = function (id) {
   let listId = getListId();
-  let req = new XMLHttpRequest();
-  req.open('put', `/todolist/alltodo`);
-  req.addEventListener('load', refresh);
-  req.send(`listId=${listId}&itemId=${id}&done=true`);
+  let data = `listId=${listId}&itemId=${id}&done=true`;
+  sendRequest('put', `/todolist/alltodo`, refresh, data);
 }
 
 let deleteItem = function (id) {
   let listId = getListId();
-  let req = new XMLHttpRequest();
-  req.open('delete', `/todolist/alltodo`);
-  req.addEventListener('load', refresh);
-  req.send(`listId=${listId}&itemId=${id}`);
+  let data = `listId=${listId}&itemId=${id}`;
+  sendRequest('delete', `/todolist/alltodo`, refresh, data);
 }
 
 let markUndone = function (id) {
   let listId = getListId();
-  let req = new XMLHttpRequest();
-  req.open('put', `/todolist/alltodo`);
-  req.addEventListener('load', refresh);
-  req.send(`listId=${listId}&itemId=${id}&done=false`);
+  let postData = `listId=${listId}&itemId=${id}&done=false`;
+  sendRequest('put', `/todolist/alltodo`, refresh, postData);
 }
 
 let renderList = function () {
@@ -49,10 +43,7 @@ let getListId = function () {
 
 let loadTodoList = function () {
   let listId = getListId();
-  let req = new XMLHttpRequest();
-  req.open('get', `/todolist/alltodo?listId=${listId}`);
-  req.addEventListener('load', renderList);
-  req.send();
+  sendRequest('GET', `/todolist/alltodo?listId=${listId}`, renderList);
 }
 
 let refresh = () => {
@@ -62,10 +53,15 @@ let refresh = () => {
 let postTodo = function () {
   let text = document.getElementById('text').value;
   let listId = getListId();
+  let postData = `id=${listId}&text=${text}`;
+  sendRequest('post', `/todolist/alltodo`, refresh, postData)
+}
+
+let sendRequest = function (method, url, onLoad, data) {
   let req = new XMLHttpRequest();
-  req.open('post', `/todolist/alltodo`);
-  req.addEventListener('load', refresh);
-  req.send(`id=${listId}&text=${text}`);
+  req.open(method, url);
+  req.addEventListener('load', onLoad);
+  req.send(data);
 }
 
 window.onload = loadTodoList;
