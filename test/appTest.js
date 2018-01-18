@@ -39,7 +39,7 @@ describe('app', () => {
   describe('POST /login', () => {
     it('redirects to todolists for valid user', done => {
       request(app, { method: 'POST', url: '/login', body: 'username=nrjais&password=nrjais' }, res => {
-        th.should_be_redirected_to(res, '/todolists.html');
+        th.should_be_redirected_to(res, '/todolists');
         th.should_not_have_cookie(res, 'message');
         th.should_have_cookie(res, 'sessionId','');
         done();

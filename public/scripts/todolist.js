@@ -5,7 +5,7 @@ let fillData = function (data) {
     let id = element.id;
     let description = element.description;
     todoList += `<p id="${id}">
-    <a href="/todolist/alltodo.html?id=${id}">
+    <a href="/todolist/${id}">
     ${title}
     </a>${description}
     <input type="button" onclick="editItem('${id}','${title}','${description}')"
@@ -38,12 +38,12 @@ let editItem = function(id,title,description){
 let saveEditedItem = function(id){
   let title = document.getElementById(id).value;
   let description = document.getElementById(id+'-des').value;
-  let postData = `id=${id}&newTitle=${title}&description=${description}`;
-  sendRequest('put', `/todolist`, refresh, postData);
+  let postData = `title=${title}&description=${description}`;
+  sendRequest('put', `/todolist/${id}`, refresh, postData);
 }
 
 let deleteItem = function (id) {
-  sendRequest('delete', `/todolist`, refresh, `id=${id}`)
+  sendRequest('delete', `/todolist/${id}`, refresh)
 }
 
 let renderList = function () {

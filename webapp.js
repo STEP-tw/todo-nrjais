@@ -21,26 +21,82 @@ const parseCookies = text => {
   }
 }
 let invoke = function (req, res) {
+  this.handlerCalled = false;
   let handler = this._handlers[req.method][req.url];
-  if (handler)
+  if (handler){
     handler(req, res);
+    this.handlerCalled = true;
+  }
 }
+
+let invokeDynamicHandler = function (req, res) {
+  if(this.handlerCalled) return;
+  let paths = Object.keys(this._dynamic[req.method]);
+  let path = paths.find(p => {
+    let regSource = '^' + p.split('/$').join('.[^/]*') + '$';
+    let pathRegex = new RegExp(regSource);
+    return pathRegex.test(req.url);
+  })
+  if (path) {
+    let handlerDetails = this._dynamic[req.method][path];
+    setRequestParams(req, path, handlerDetails.params);
+    handlerDetails.handler(req, res);
+  }
+}
+
+const setRequestParams = function (req, pathStruct, params) {
+  let paths = pathStruct.split('/')
+  let urlPaths = req.url.split('/');
+  let values = paths.reduce((a, v, i) =>{
+    if (v == '$')
+      a.push(urlPaths[i])
+    return a;
+  }, []);
+  req.params = {};
+  params.forEach((param, index) => {
+    req.params[param] = values[index];
+  });
+}
+
+const addDynamicUrl = function (handlerCollection, handler, url) {
+  let path = url.replace(/\$\w+(?=\/|)/g, '$');
+  let params = url.match(/\/\$\w+(?=\/|)/g).map(p => p.replace('/$', ''));
+  handlerCollection[path] = {
+    params: params,
+    handler: handler
+  }
+}
+
+let isDynamic = function (url) {
+  return url.includes('$');
+}
+
 const initialize = function () {
-  this._handlers = { GET: {}, POST: {}, PUT: {}, DELETE:{}};
   this._preprocess = [];
   this._postprocess = [];
+  this._handlers = { GET: {}, POST: {}, PUT: {}, DELETE: {} };
+  this._dynamic = { GET: {}, POST: {}, PUT: {}, DELETE: {} };
 };
+
+const addUrl = function (method, url, handler) {
+  if (isDynamic(url)) {
+    addDynamicUrl(this._dynamic[method], handler, url);
+    return;
+  }
+  this._handlers[method][url] = handler;
+}
+
 const get = function (url, handler) {
-  this._handlers.GET[url] = handler;
+  addUrl.call(this, 'GET', url, handler)
 }
 const put = function (url, handler) {
-  this._handlers.PUT[url] = handler;
+  addUrl.call(this, 'PUT', url, handler)
 }
 const post = function (url, handler) {
-  this._handlers.POST[url] = handler;
+  addUrl.call(this, 'POST', url, handler)
 };
 const onDelete = function (url, handler) {
-  this._handlers.DELETE[url] = handler;
+  addUrl.call(this, 'DELETE', url, handler)
 };
 const use = function (handler) {
   this._preprocess.push(handler);
@@ -62,6 +118,8 @@ const main = function (req, res) {
     runMiddleWares(this._preprocess, req, res);
     if (res.finished) return;
     invoke.call(this, req, res);
+    if (res.finished) return;
+    invokeDynamicHandler.call(this, req, res);
     if (res.finished) return;
     runMiddleWares(this._postprocess, req, res);
     if (!res.finished) {

@@ -14,20 +14,19 @@ let fillData = function (data) {
 
 let markDone = function (id) {
   let listId = getListId();
-  let data = `listId=${listId}&itemId=${id}&done=true`;
-  sendRequest('put', `/todolist/alltodo`, refresh, data);
+  let data = `done=true`;
+  sendRequest('put', `/todolist/${listId}/todo/${id}`, refresh, data);
 }
 
 let deleteItem = function (id) {
   let listId = getListId();
-  let data = `listId=${listId}&itemId=${id}`;
-  sendRequest('delete', `/todolist/alltodo`, refresh, data);
+  sendRequest('delete', `/todolist/${listId}/todo/${id}`, refresh);
 }
 
 let markUndone = function (id) {
   let listId = getListId();
-  let postData = `listId=${listId}&itemId=${id}&done=false`;
-  sendRequest('put', `/todolist/alltodo`, refresh, postData);
+  let postData = `done=false`;
+  sendRequest('put', `/todolist/${listId}/todo/${id}`, refresh, postData);
 }
 
 let renderList = function () {
@@ -38,12 +37,12 @@ let renderList = function () {
 
 let getListId = function () {
   let url = window.location.href;
-  return url.split('?').pop().split('=').pop();
+  return url.split('/').pop();
 }
 
 let loadTodoList = function () {
   let listId = getListId();
-  sendRequest('GET', `/todolist/alltodo?listId=${listId}`, renderList);
+  sendRequest('GET', `/data/todolist/${listId}`, renderList);
 }
 
 let refresh = () => {
@@ -53,11 +52,12 @@ let refresh = () => {
 let postTodo = function () {
   let text = document.getElementById('text').value;
   let listId = getListId();
-  let postData = `id=${listId}&text=${text}`;
-  sendRequest('post', `/todolist/alltodo`, refresh, postData)
+  let postData = `text=${text}`;
+  sendRequest('post', `/todolist/${listId}`, refresh, postData)
 }
 
 let sendRequest = function (method, url, onLoad, data) {
+  console.log(url, data, method);
   let req = new XMLHttpRequest();
   req.open(method, url);
   req.addEventListener('load', onLoad);
